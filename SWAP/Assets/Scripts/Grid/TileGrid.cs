@@ -74,6 +74,7 @@ public class TileGrid : MonoSingleton<TileGrid> {
             float yPos = ((tileLength * point.Y) + (point.Y * offset)) + startPos.y;
 
             newTile.transform.position = new Vector2(xPos, yPos);
+            newTile.Initalize(point);
 
             return newTile;
         }
@@ -85,5 +86,15 @@ public class TileGrid : MonoSingleton<TileGrid> {
         }
 
         #endregion
+    }
+
+    internal bool TryGetTile(GridPoint point, out Tile tile) {
+        tile = null;
+
+        if (gridmap.ContainsKey(point)) {
+            tile = gridmap[point];
+        }
+
+        return tile != null;
     }
 }

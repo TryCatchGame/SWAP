@@ -6,7 +6,12 @@ using MyBox;
 
 namespace Manager {
     public class TapManager : MonoSingleton<TapManager> {
-        protected override void OnAwake() {}
+
+        private Camera mainCamera;
+
+        protected override void OnAwake() {
+            mainCamera = Camera.main;
+        }
 
         private void Update() {
             if (UserTapped()) {
@@ -36,7 +41,10 @@ namespace Manager {
         }
 
         private void InvokeUserTapped(Vector2 tapPosition) {
-            RaycastHit2D hit = Physics2D.Raycast(tapPosition, Vector2.zero);
+
+            Vector2 raycastPos = mainCamera.ScreenToWorldPoint(tapPosition);
+
+            RaycastHit2D hit = Physics2D.Raycast(raycastPos, Vector2.zero);
 
             if (RaycastHitTappableObject(out TappableObject tappableObject)) {
                 tappableObject.Tap();
@@ -44,16 +52,16 @@ namespace Manager {
 
             #region Local_Function
 
-            bool RaycastHitTappableObject(out TappableObject tappableObject) {
-                tappableObject = null;
+            bool RaycastHitTappableObject(out TappableObject targetObject) {
+                targetObject = null;
 
                 if (hit.collider != null) {
-                    tappableObject = hit.collider.gameObject.GetComponent<TappableObject>();
+                    Debug.Log(hit.collider.gameObject.name);
+                    targetObject = hit.collider.gameObject.GetComponent<TappableObject>();
                 }
 
-                return tappableObject != null;
+                return targetObject != null;
             }
-
             #endregion
         }
     }
