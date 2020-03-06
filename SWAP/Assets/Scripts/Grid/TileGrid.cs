@@ -7,9 +7,35 @@ using MyBox;
 
 public class TileGrid : MonoSingleton<TileGrid> {
 
+    #region STRUCT_GridLayout
+
+    private readonly struct GridLayout { 
+        internal int CameraSize { get; }
+
+        internal int GridSize { get; }
+
+        internal GridLayout(int cameraSize, int gridSize) =>
+            (CameraSize, GridSize) = (cameraSize, gridSize);
+
+        internal static GridLayout FromGridSetup(GridSetup gridSetup) {
+            switch (gridSetup) {
+                case GridSetup.Three_By_Three:
+                    return new GridLayout(5, 3);
+                case GridSetup.Five_By_Five:
+                    return new GridLayout(8, 5);
+                case GridSetup.Seven_By_Seven:
+                    return new GridLayout(11, 7);
+                default:
+                    return new GridLayout(5, 3);
+            }
+        }
+    }
+
+    #endregion
+
     [Separator("DEBUG")]
     [SerializeField]
-    private int gridSize;
+    private GridSetup gridSetup;
 
     [Separator("Tiles Setup")]
     [SerializeField, Tooltip("Prefab for the tile"), MustBeAssigned]
@@ -29,7 +55,12 @@ public class TileGrid : MonoSingleton<TileGrid> {
     }
 
     private void CreateGrid() {
+        Camera mainCamera = Camera.main;
+        GridLayout gridLayout = GridLayout.FromGridSetup(gridSetup);
+        mainCamera.orthographicSize = gridLayout.CameraSize;
+
         gridmap = new Dictionary<GridPoint, Tile>();
+
         Vector2 startPos = GetScreenCenter();
         float tileLength = tilePrefab.GetLength();
 
@@ -50,15 +81,15 @@ public class TileGrid : MonoSingleton<TileGrid> {
         #region Local_Function
 
         GridPoint GetTopLeftPoint() {
-            int xPoint = Mathf.FloorToInt(gridSize / 2f);
-            int yPoint = Mathf.FloorToInt(gridSize / 2f);
+            int xPoint = Mathf.FloorToInt(gridLayout.GridSize / 2f);
+            int yPoint = Mathf.FloorToInt(gridLayout.GridSize / 2f);
 
             return new GridPoint(xPoint, yPoint);
         }
 
         GridPoint GetBottomRightPoint() {
-            int xPoint = -Mathf.FloorToInt(gridSize / 2f);
-            int yPoint = -Mathf.FloorToInt(gridSize / 2f);
+            int xPoint = -Mathf.FloorToInt(gridLayout.GridSize / 2f);
+            int yPoint = -Mathf.FloorToInt(gridLayout.GridSize / 2f);
 
             return new GridPoint(xPoint, yPoint);
         }
@@ -80,9 +111,7 @@ public class TileGrid : MonoSingleton<TileGrid> {
         }
 
         Vector2 GetScreenCenter() {
-            Camera camera = Camera.main;
-
-            return camera.ViewportToWorldPoint(new Vector2(0.5f, 0.5f));
+            return mainCamera.ViewportToWorldPoint(new Vector2(0.5f, 0.5f));
         }
 
         #endregion

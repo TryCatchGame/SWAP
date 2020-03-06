@@ -164,7 +164,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33951846e7dc5ba4e9a6bb7bca2ff329, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridSize: 3
+  gridSetup: 2
   tilePrefab: {fileID: 2259194340554363404, guid: 839c30a87d691094b9a726799601222e,
     type: 3}
   offset: 0.35
