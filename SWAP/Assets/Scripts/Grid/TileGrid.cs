@@ -4,6 +4,7 @@ using UnityEngine;
 
 using Entity;
 using MyBox;
+using Manager;
 
 public class TileGrid : MonoSingleton<TileGrid> {
 
@@ -33,10 +34,6 @@ public class TileGrid : MonoSingleton<TileGrid> {
 
     #endregion
 
-    [Separator("DEBUG")]
-    [SerializeField]
-    private GridSetup gridSetup;
-
     [Separator("Tiles Setup")]
     [SerializeField, Tooltip("Prefab for the tile"), MustBeAssigned]
     private Tile tilePrefab;
@@ -56,7 +53,7 @@ public class TileGrid : MonoSingleton<TileGrid> {
 
     private void CreateGrid() {
         Camera mainCamera = Camera.main;
-        GridLayout gridLayout = GridLayout.FromGridSetup(gridSetup);
+        GridLayout gridLayout = GridLayout.FromGridSetup(GameCache.CurrentGridSize);
         mainCamera.orthographicSize = gridLayout.CameraSize;
 
         gridmap = new Dictionary<GridPoint, Tile>();

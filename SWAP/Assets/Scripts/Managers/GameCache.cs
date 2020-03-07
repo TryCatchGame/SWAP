@@ -18,6 +18,8 @@ namespace Manager {
         }
         #endregion
 
+        internal static GridSetup CurrentGridSize { get; set; }
+
         internal TileColorSet TileColor { get; private set; }
 
         protected override void OnAwake() {
