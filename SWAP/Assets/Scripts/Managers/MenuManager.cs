@@ -9,6 +9,13 @@ namespace Manager {
 
 		private void Awake() {
 			GameCache.CurrentGridSize = GridSetup.Five_By_Five;
+
+			GameCache.LoadTileColor(new Entity.TileColorSet(Color.white, Color.black, Color.grey));
+		}
+
+		// TODO: Link this up with the UI.
+		public void SelectTheme(Theme theme) {
+			GameCache.LoadTileColor(theme.ToTileColor());
 		}
 
 		public void ToggleSettingPage(bool state) {
