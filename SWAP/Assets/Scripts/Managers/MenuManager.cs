@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using DanielLochner.Assets.SimpleScrollSnap;
 
 namespace Manager {
 	public class MenuManager : MonoBehaviour {
@@ -7,15 +8,18 @@ namespace Manager {
 		[SerializeField, Tooltip("Reference to settings canvas")]
 		private GameObject settingsCanvas;
 
+		[SerializeField, Tooltip("Reference to theme select scroll rect")]
+		private SimpleScrollSnap scrollSnap;
+
 		private void Awake() {
 			GameCache.CurrentGridSize = GridSetup.Five_By_Five;
 
 			GameCache.LoadTileColor(new Entity.TileColorSet(Color.white, Color.black, Color.grey));
 		}
 
-		// TODO: Link this up with the UI.
-		public void SelectTheme(Theme theme) {
-			GameCache.LoadTileColor(theme.ToTileColor());
+		public void UpdateTheme() {
+			int themeIndex = scrollSnap.TargetPanel;
+			GameCache.LoadTileColor(((Theme)themeIndex).ToTileColor());
 		}
 
 		public void ToggleSettingPage(bool state) {
@@ -31,11 +35,11 @@ namespace Manager {
 		}
 
 		private void ShiftGridSize(int count) {
-			int nextGridSize = (int) GameCache.CurrentGridSize +count;
+			int nextGridSize = (int)GameCache.CurrentGridSize + count;
 
-			if (nextGridSize < 0) {
+			if(nextGridSize < 0) {
 				++nextGridSize;
-			} else if (nextGridSize >= Enum.GetNames(typeof(GridSetup)).Length) {
+			} else if(nextGridSize >= Enum.GetNames(typeof(GridSetup)).Length) {
 				--nextGridSize;
 			}
 

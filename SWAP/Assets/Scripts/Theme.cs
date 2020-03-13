@@ -1,4 +1,9 @@
 ﻿[System.Serializable]
-public enum Theme { 
-    Cherry
+public enum Theme {
+	Default,
+	Candy,
+	Hazard,
+	Breeze,
+	Volt,
+	Coral
 }
