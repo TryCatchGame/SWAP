@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using Manager;
 
 namespace Michsky.UI.ModernUIPack {
 	public class SwitchAnim : MonoBehaviour {
